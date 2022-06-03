@@ -43,13 +43,18 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
-    .then(() => res.send({
-      message: 'Карточка места удалена',
-    }))
+    .then(result => {
+      if (!result._id) {
+        return;
+      }
+      res.send({
+        message: 'Карточка места удалена',
+      });
+    })
     .catch(err => {
       if (err.name === 'CastError') {
         res.status(WRONG_DATA_CODE).send({
-          message: 'Карточка с указанным _id не найден',
+          message: 'Карточка с указанным _id не найдена',
         });
         return;
       }
