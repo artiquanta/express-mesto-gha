@@ -1,9 +1,7 @@
 const User = require('../models/user');
-
-// Коды ошибок
-const DEFAULT_ERROR_CODE = 500;
-const WRONG_DATA_CODE = 400;
-const NOT_FOUND_CODE = 404;
+const {
+  WRONG_DATA_CODE, NOT_FOUND_CODE, DEFAULT_ERROR_CODE, NotFoundError,
+} = require('../utils/utils');
 
 // Запрос всех пользователей
 module.exports.getUsers = (req, res) => {
@@ -18,6 +16,7 @@ module.exports.getUsers = (req, res) => {
 module.exports.getUser = (req, res) => {
   const { id } = req.params;
   User.findById(id)
+    .orFail(() => new NotFoundError('Not Found'))
     .then(user => res.send({
       name: user.name,
       about: user.about,
@@ -31,7 +30,7 @@ module.exports.getUser = (req, res) => {
         });
         return;
       }
-      if (!err.path) {
+      if (err instanceof NotFoundError) {
         res.status(NOT_FOUND_CODE).send({
           message: 'Пользователь по указанному _id не найден',
         });
@@ -70,6 +69,7 @@ module.exports.createUser = (req, res) => {
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
+    .orFail(() => new NotFoundError('Not Found'))
     .then(user => res.send({
       name: user.name,
       about: user.about,
@@ -83,7 +83,7 @@ module.exports.updateUser = (req, res) => {
         });
         return;
       }
-      if (err.name === 'CastError') {
+      if (err instanceof NotFoundError) {
         res.status(NOT_FOUND_CODE).send({
           message: 'Пользователь с указанным _id не найден',
         });
@@ -99,6 +99,7 @@ module.exports.updateUser = (req, res) => {
 module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
+    .orFail(() => new NotFoundError('Not Found'))
     .then(user => res.send({
       name: user.name,
       about: user.about,
@@ -112,7 +113,7 @@ module.exports.updateAvatar = (req, res) => {
         });
         return;
       }
-      if (err.name === 'CastError') {
+      if (err instanceof NotFoundError) {
         res.status(NOT_FOUND_CODE).send({
           message: 'Пользователь с указанным _id не найден',
         });

@@ -1,9 +1,7 @@
 const Card = require('../models/card');
-
-// Коды ошибок
-const DEFAULT_ERROR_CODE = 500;
-const WRONG_DATA_CODE = 400;
-const NOT_FOUND_CODE = 404;
+const {
+  WRONG_DATA_CODE, NOT_FOUND_CODE, DEFAULT_ERROR_CODE, NotFoundError,
+} = require('../utils/utils');
 
 // Запрос всех карточек мест
 module.exports.getCards = (req, res) => {
@@ -43,10 +41,8 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
-    .then(result => {
-      if (!result._id) {
-        return;
-      }
+    .orFail(() => new NotFoundError('Not Found'))
+    .then(() => {
       res.send({
         message: 'Карточка места удалена',
       });
@@ -58,7 +54,7 @@ module.exports.deleteCard = (req, res) => {
         });
         return;
       }
-      if (!err.path) {
+      if (err instanceof NotFoundError) {
         res.status(NOT_FOUND_CODE).send({
           message: 'Передан несуществующий _id карточки',
         });
@@ -74,6 +70,7 @@ module.exports.deleteCard = (req, res) => {
 module.exports.likeCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, { new: true })
+    .orFail(() => new NotFoundError('Not Found'))
     .then(card => res.send({
       _id: card._id,
       name: card.name,
@@ -89,7 +86,7 @@ module.exports.likeCard = (req, res) => {
         });
         return;
       }
-      if (!err.path) {
+      if (err instanceof NotFoundError) {
         res.status(NOT_FOUND_CODE).send({
           message: 'Передан несуществующий _id карточки',
         });
@@ -105,6 +102,7 @@ module.exports.likeCard = (req, res) => {
 module.exports.dislikeCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true })
+    .orFail(() => new NotFoundError('Not Found'))
     .then(card => res.send({
       _id: card._id,
       name: card.name,
@@ -120,7 +118,7 @@ module.exports.dislikeCard = (req, res) => {
         });
         return;
       }
-      if (!err.path) {
+      if (err instanceof NotFoundError) {
         res.status(NOT_FOUND_CODE).send({
           message: 'Передан несуществующий _id карточки',
         });

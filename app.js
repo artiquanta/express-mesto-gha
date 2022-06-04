@@ -1,9 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { NOT_FOUND_CODE } = require('./utils/utils');
 
 const { PORT = 3000 } = process.env;
-const NOT_FOUND_CODE = 404;
 
 const app = express();
 

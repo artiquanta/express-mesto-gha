@@ -1,7 +1,7 @@
 {
-  "name": "express-mesto-gha",
-  "version": "1.0.0",
-  "description": "[![Tests for sprint 13](https://github.com/artiquanta/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/artiquanta/express-mesto-gha/actions/workflows/tests-13-sprint.yml)",
+  "name": "mesto-react",
+  "version": "0.5.1",
+  "description": "Проектная работа №13: Mesto: Russia (фронтенд + бэкенд)",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
@@ -12,9 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/artiquanta/express-mesto-gha.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Artiquanta",
   "bugs": {
     "url": "https://github.com/artiquanta/express-mesto-gha/issues"
   },
