@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const { urlPattern } = require('../utils/utils');
 
 const cardSchema = new Schema({
   name: {
@@ -10,6 +11,12 @@ const cardSchema = new Schema({
   link: {
     type: String,
     required: true,
+    validate: {
+      validator(v) {
+        return urlPattern.test(v);
+      },
+      message: 'Указан некорректный формат ссылки',
+    },
   },
   owner: {
     type: Schema.Types.ObjectId,
