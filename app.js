@@ -4,7 +4,6 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
-// const { celebrate, Joi, isCelebrateError } = require('celebrate'); - celebrateCustomError
 const { celebrate, Joi, errors } = require('celebrate');
 const {
   urlPattern,
@@ -15,7 +14,6 @@ const {
 
 const { PORT = 3000 } = process.env;
 const { createUser, login } = require('./controllers/users');
-// const WrongDataError = require('./errors/wrong-data-err'); - celebrateCustomError
 
 const app = express();
 
@@ -57,15 +55,6 @@ app.use((req, res) => {
     message: 'Страница не найдена. Проверьте ссылку',
   });
 });
-
-// Обработчик ошибок валидации celebrate - celebrateCustomError (не проходит тест)
-/* app.use((err, req, res, next) => {
-  if (isCelebrateError(err)) {
-    throw new WrongDataError(err.details.get('body').message);
-  }
-  next(err);
-});
- */
 
 app.use(errors());
 app.use((err, req, res, next) => {

@@ -29,14 +29,13 @@ module.exports.createUser = (req, res, next) => {
     }))
     .catch(err => {
       if (err.name === 'ValidationError') {
-        throw new WrongDataError('Переданы некорректные данные при создании пользователя');
+        next(new WrongDataError('Переданы некорректные данные при создании пользователя'));
       }
       if (err.code === 11000) {
-        throw new AlreadyExistError('Указанный Email уже зарегистрирован');
+        next(new AlreadyExistError('Указанный Email уже зарегистрирован'));
       }
       next(err);
-    })
-    .catch(next);
+    });
 };
 
 // Аутентификация пользователя
@@ -54,9 +53,8 @@ module.exports.login = (req, res, next) => {
         .send({ message: 'Вы успешно авторизовались' });
     })
     .catch(() => {
-      throw new NotAuthorizedError('Некорректные почта или пароль');
-    })
-    .catch(next);
+      next(new NotAuthorizedError('Некорректные почта или пароль'));
+    });
 };
 
 // Запрос всех пользователей
@@ -70,7 +68,7 @@ module.exports.getUsers = (req, res, next) => {
 module.exports.getUser = (req, res, next) => {
   const { id } = req.params;
   User.findById(id)
-    .orFail(() => new NotFoundError('Пользователь по указанному _id не найден'))
+    .orFail(() => next(new NotFoundError('Пользователь по указанному _id не найден')))
     .then(user => res.send({
       name: user.name,
       about: user.about,
@@ -79,17 +77,16 @@ module.exports.getUser = (req, res, next) => {
     }))
     .catch(err => {
       if (err.name === 'CastError') {
-        throw new WrongDataError('Указан некорректный формат _id пользователя');
+        next(new WrongDataError('Указан некорректный формат _id пользователя'));
       }
       next(err);
-    })
-    .catch(next);
+    });
 };
 
 // Запрос информации о текущем пользователе
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(() => new NotFoundError('Пользователь по указанному _id не найден'))
+    .orFail(() => next(new NotFoundError('Пользователь по указанному _id не найден')))
     .then(user => res.send({
       name: user.name,
       about: user.about,
@@ -99,18 +96,17 @@ module.exports.getCurrentUser = (req, res, next) => {
     }))
     .catch(err => {
       if (err.name === 'CastError') {
-        throw new WrongDataError('Указан некорректный формат _id пользователя');
+        next(new WrongDataError('Указан некорректный формат _id пользователя'));
       }
       next(err);
-    })
-    .catch(next);
+    });
 };
 
 // Обновление профиля пользователя
 module.exports.updateUser = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
-    .orFail(() => new NotFoundError('Пользователь с указанным _id не найден'))
+    .orFail(() => next(new NotFoundError('Пользователь с указанным _id не найден')))
     .then(user => res.send({
       name: user.name,
       about: user.about,
@@ -119,18 +115,17 @@ module.exports.updateUser = (req, res, next) => {
     }))
     .catch(err => {
       if (err.name === 'ValidationError') {
-        throw new WrongDataError('Переданы некорректные данные при обновлении пользователя');
+        next(new WrongDataError('Переданы некорректные данные при обновлении пользователя'));
       }
       next(err);
-    })
-    .catch(next);
+    });
 };
 
 // Обновление аватара пользователя
 module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
-    .orFail(() => new NotFoundError('Пользователь с указанным _id не найден'))
+    .orFail(() => next(new NotFoundError('Пользователь с указанным _id не найден')))
     .then(user => res.send({
       name: user.name,
       about: user.about,
@@ -139,9 +134,8 @@ module.exports.updateAvatar = (req, res, next) => {
     }))
     .catch(err => {
       if (err.name === 'ValidationError') {
-        throw new WrongDataError('Переданы некорректные данные при обновлении аватара');
+        next(new WrongDataError('Переданы некорректные данные при обновлении аватара'));
       }
       next(err);
-    })
-    .catch(next);
+    });
 };

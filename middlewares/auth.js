@@ -8,14 +8,14 @@ module.exports = (req, res, next) => {
     throw new NotAuthorizedError('Ошибка авторизации');
   }
   const token = jwt.replace('Bearer ', '');
-  let playload;
+  let payload;
 
   try {
-    playload = verify(token, secretKey);
+    payload = verify(token, secretKey);
   } catch (err) {
     throw new NotAuthorizedError('Ошибка авторизации');
   }
 
-  req.user = playload;
+  req.user = payload;
   next();
 };
