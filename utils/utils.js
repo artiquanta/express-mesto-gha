@@ -11,8 +11,8 @@ const celebrateErrors = {
   'any.required': '{#label} обязательно!',
 };
 const DEFAULT_ERROR_CODE = 500;
-const NOT_FOUNT_CODE = 400;
+const NOT_FOUND_CODE = 404;
 
 module.exports = {
-  secretKey, urlPattern, celebrateErrors, DEFAULT_ERROR_CODE, NOT_FOUNT_CODE,
+  secretKey, urlPattern, celebrateErrors, DEFAULT_ERROR_CODE, NOT_FOUND_CODE,
 };

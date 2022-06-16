@@ -10,7 +10,7 @@ const {
   urlPattern,
   celebrateErrors,
   DEFAULT_ERROR_CODE,
-  NOT_FOUNT_CODE,
+  NOT_FOUND_CODE,
 } = require('./utils/utils');
 
 const { PORT = 3000 } = process.env;
@@ -53,7 +53,7 @@ app.use('/cards', require('./routes/cards'));
 
 // Обработчик 404-ошибки
 app.use((req, res) => {
-  res.status(NOT_FOUNT_CODE).send({
+  res.status(NOT_FOUND_CODE).send({
     message: 'Страница не найдена. Проверьте ссылку',
   });
 });
