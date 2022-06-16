@@ -6,7 +6,12 @@ const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 // const { celebrate, Joi, isCelebrateError } = require('celebrate'); - celebrateCustomError
 const { celebrate, Joi, errors } = require('celebrate');
-const { urlPattern, celebrateErrors } = require('./utils/utils');
+const {
+  urlPattern,
+  celebrateErrors,
+  DEFAULT_ERROR_CODE,
+  NOT_FOUNT_CODE,
+} = require('./utils/utils');
 
 const { PORT = 3000 } = process.env;
 const { createUser, login } = require('./controllers/users');
@@ -48,7 +53,7 @@ app.use('/cards', require('./routes/cards'));
 
 // Обработчик 404-ошибки
 app.use((req, res) => {
-  res.status(404).send({
+  res.status(NOT_FOUNT_CODE).send({
     message: 'Страница не найдена. Проверьте ссылку',
   });
 });
@@ -64,11 +69,11 @@ app.use((req, res) => {
 
 app.use(errors());
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
+  const { statusCode = DEFAULT_ERROR_CODE, message } = err;
   res
     .status(statusCode)
     .send({
-      message: statusCode === 500
+      message: statusCode === DEFAULT_ERROR_CODE
         ? 'На сервере произошла ошибка... Проверьте данные и повторите Ваш запрос чуть позже!'
         : message,
     });

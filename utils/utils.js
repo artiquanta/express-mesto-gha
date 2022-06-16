@@ -10,5 +10,9 @@ const celebrateErrors = {
   'string.pattern.base': '{#label} имеет некорректный формат данных. Проверьте данные и повторите запрос!',
   'any.required': '{#label} обязательно!',
 };
+const DEFAULT_ERROR_CODE = 500;
+const NOT_FOUNT_CODE = 400;
 
-module.exports = { secretKey, urlPattern, celebrateErrors };
+module.exports = {
+  secretKey, urlPattern, celebrateErrors, DEFAULT_ERROR_CODE, NOT_FOUNT_CODE,
+};
