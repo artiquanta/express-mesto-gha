@@ -1,6 +1,7 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/not-found-err');
 const WrongDataError = require('../errors/wrong-data-err');
+const NotAuthorizedError = require('../errors/not-authorized-err');
 
 // Запрос всех карточек мест
 module.exports.getCards = (req, res, next) => {
@@ -33,8 +34,14 @@ module.exports.createCard = (req, res, next) => {
 // Удаление карточки места
 module.exports.deleteCard = (req, res, next) => {
   const { cardId } = req.params;
-  Card.findByIdAndRemove(cardId)
+  Card.findById(cardId)
     .orFail(() => new NotFoundError('Передан несуществующий _id карточки'))
+    .then(card => {
+      if (card.owner.toString() !== req.user._id) {
+        throw new NotAuthorizedError('Вы не можете удалить чужую карточку');
+      }
+      return Card.findByIdAndRemove(cardId);
+    })
     .then(() => {
       res.send({
         message: 'Карточка места удалена',
@@ -43,9 +50,6 @@ module.exports.deleteCard = (req, res, next) => {
     .catch(err => {
       if (err.name === 'CastError') {
         throw new WrongDataError('Карточка с указанным _id не найдена');
-      }
-      if (err instanceof NotFoundError) {
-        next(err);
       }
       next(err);
     })
@@ -69,9 +73,6 @@ module.exports.likeCard = (req, res, next) => {
       if (err.name === 'CastError') {
         throw new WrongDataError('Переданы некорректные данные для постановки лайка');
       }
-      if (err instanceof NotFoundError) {
-        next(err);
-      }
       next(err);
     })
     .catch(next);
@@ -93,9 +94,6 @@ module.exports.dislikeCard = (req, res, next) => {
     .catch(err => {
       if (err.name === 'CastError') {
         throw new WrongDataError('Переданы некорректные данные для постановки лайка');
-      }
-      if (err instanceof NotFoundError) {
-        next(err);
       }
       next(err);
     })

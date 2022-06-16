@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
-const { celebrate, Joi, isCelebrateError } = require('celebrate');
+const { celebrate, Joi, isCelebrateError, errors } = require('celebrate');
 const { urlPattern, celebrateErrors } = require('./utils/utils');
 
 const { PORT = 3000 } = process.env;
@@ -53,13 +53,15 @@ app.use((req, res) => {
 });
 
 // Обработчик ошибок валидации celebrate
-app.use((err, req, res, next) => {
+/* app.use((err, req, res, next) => {
   if (isCelebrateError(err)) {
     throw new WrongDataError(err.details.get('body').message);
   }
   next(err);
 });
+ */
 
+app.use(errors());
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res

@@ -5,6 +5,7 @@ const { secretKey } = require('../utils/utils');
 const NotFoundError = require('../errors/not-found-err');
 const WrongDataError = require('../errors/wrong-data-err');
 const AlreadyExistError = require('../errors/already-exist-err');
+const NotAuthorizedError = require('../errors/not-authorized-err');
 
 // Создание пользователя
 module.exports.createUser = (req, res, next) => {
@@ -53,7 +54,7 @@ module.exports.login = (req, res, next) => {
         .send({ message: 'Вы успешно авторизовались' });
     })
     .catch(() => {
-      throw new WrongDataError('Некорректные почта или пароль');
+      throw new NotAuthorizedError('Некорректные почта или пароль');
     })
     .catch(next);
 };
@@ -120,9 +121,6 @@ module.exports.updateUser = (req, res, next) => {
       if (err.name === 'ValidationError') {
         throw new WrongDataError('Переданы некорректные данные при обновлении пользователя');
       }
-      if (err instanceof NotFoundError) {
-        next(err);
-      }
       next(err);
     })
     .catch(next);
@@ -142,9 +140,6 @@ module.exports.updateAvatar = (req, res, next) => {
     .catch(err => {
       if (err.name === 'ValidationError') {
         throw new WrongDataError('Переданы некорректные данные при обновлении аватара');
-      }
-      if (err instanceof NotFoundError) {
-        next(err);
       }
       next(err);
     })

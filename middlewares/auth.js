@@ -4,7 +4,7 @@ const { secretKey } = require('../utils/utils');
 
 module.exports = (req, res, next) => {
   const { jwt } = req.cookies;
-  if (!jwt || jwt.startsWith('Bearer ')) { // Временно убрано "!"
+  if (!jwt) {
     throw new NotAuthorizedError('Ошибка авторизации');
   }
   const token = jwt.replace('Bearer ', '');
