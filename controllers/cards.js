@@ -1,7 +1,7 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/not-found-err');
 const WrongDataError = require('../errors/wrong-data-err');
-const NotAuthorizedError = require('../errors/not-authorized-err');
+const ForbiddenError = require('../errors/forbidden-err');
 
 // Запрос всех карточек мест
 module.exports.getCards = (req, res, next) => {
@@ -38,7 +38,7 @@ module.exports.deleteCard = (req, res, next) => {
     .orFail(() => new NotFoundError('Передан несуществующий _id карточки'))
     .then(card => {
       if (card.owner.toString() !== req.user._id) {
-        throw new NotAuthorizedError('Вы не можете удалить чужую карточку');
+        throw new ForbiddenError('Вы не можете удалить чужую карточку');
       }
       return Card.findByIdAndRemove(cardId);
     })

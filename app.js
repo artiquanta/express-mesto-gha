@@ -4,12 +4,13 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
-const { celebrate, Joi, isCelebrateError, errors } = require('celebrate');
+// const { celebrate, Joi, isCelebrateError } = require('celebrate'); - celebrateCustomError
+const { celebrate, Joi, errors } = require('celebrate');
 const { urlPattern, celebrateErrors } = require('./utils/utils');
 
 const { PORT = 3000 } = process.env;
 const { createUser, login } = require('./controllers/users');
-const WrongDataError = require('./errors/wrong-data-err');
+// const WrongDataError = require('./errors/wrong-data-err'); - celebrateCustomError
 
 const app = express();
 
@@ -52,7 +53,7 @@ app.use((req, res) => {
   });
 });
 
-// Обработчик ошибок валидации celebrate
+// Обработчик ошибок валидации celebrate - celebrateCustomError (не проходит тест)
 /* app.use((err, req, res, next) => {
   if (isCelebrateError(err)) {
     throw new WrongDataError(err.details.get('body').message);
