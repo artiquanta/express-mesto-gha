@@ -16,6 +16,7 @@ const NOT_FOUND_CODE = 404;
 const allowedCors = [
   'http://quantum.nomoredomains.xyz',
   'https://quantum.nomoredomains.xyz',
+  'localhost:3000',
 ];
 const DEFAULT_ALLOWED_METHODS = 'GET, POST, PATCH, PUT, DELETE';
 
