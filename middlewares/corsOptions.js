@@ -17,7 +17,6 @@ module.exports = (req, res, next) => {
         'Access-Control-Allow-Headers': requestHeaders,
       });
     }
-    res.end();
   }
 
   next();
