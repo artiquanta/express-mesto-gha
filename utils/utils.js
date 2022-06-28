@@ -13,6 +13,18 @@ const celebrateErrors = {
 const DEFAULT_ERROR_CODE = 500;
 const NOT_FOUND_CODE = 404;
 
+const allowedCors = [
+  'http://quantum.nomoredomains.xyz',
+  'https://quantum.nomoredomains.xyz',
+];
+const DEFAULT_ALLOWED_METHODS = 'GET, POST, PATCH, PUT, DELETE';
+
 module.exports = {
-  secretKey, urlPattern, celebrateErrors, DEFAULT_ERROR_CODE, NOT_FOUND_CODE,
+  secretKey,
+  urlPattern,
+  celebrateErrors,
+  DEFAULT_ERROR_CODE,
+  NOT_FOUND_CODE,
+  allowedCors,
+  DEFAULT_ALLOWED_METHODS,
 };
