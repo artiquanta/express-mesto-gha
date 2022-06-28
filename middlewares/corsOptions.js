@@ -5,8 +5,10 @@ module.exports = (req, res, next) => {
   const { method } = req;
 
   if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Credentials', true); // test
+    res.set({
+      'Access-Control-Allow-Origin': origin,
+      'Access-Control-Allow-Credentials': true,
+    });
 
     if (method === 'OPTIONS') {
       const requestHeaders = req.headers['access-control-request-headers'];
@@ -14,8 +16,8 @@ module.exports = (req, res, next) => {
         'Access-Control-Allow-Methods': DEFAULT_ALLOWED_METHODS,
         'Access-Control-Allow-Headers': requestHeaders,
       });
-      res.end();
     }
+    res.end();
   }
 
   next();
