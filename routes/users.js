@@ -11,6 +11,9 @@ router.get('/', getUsers);
 // Запрос информации о текущем пользователе
 router.get('/me', getCurrentUser);
 
+// Выход пользователя из системы
+router.get('/logout', logout);
+
 // Запрос информации о пользователе по ID
 router.get('/:id', celebrate({
   params: Joi.object().keys({
@@ -32,8 +35,5 @@ router.patch('/me/avatar', celebrate({
     avatar: Joi.string().pattern(urlPattern),
   }).messages(celebrateErrors),
 }), updateAvatar);
-
-// Выход пользователя из системы
-router.get('/logout', logout);
 
 module.exports = router;
