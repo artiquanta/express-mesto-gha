@@ -63,6 +63,17 @@ module.exports.login = (req, res, next) => {
     });
 };
 
+// Выход пользователя из системы
+module.exports.logout = (req, res, next) => {
+  res
+    .cookie('jwt', '', {
+      maxAge: 1,
+      httpOnly: true,
+      sameSite: true,
+    })
+    .send({ message: 'Вы успешно вышли из системы. До скорой встречи' });
+};
+
 // Запрос всех пользователей
 module.exports.getUsers = (req, res, next) => {
   User.find({})

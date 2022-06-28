@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const {
-  getUsers, getUser, getCurrentUser, updateUser, updateAvatar,
+  getUsers, getUser, getCurrentUser, updateUser, updateAvatar, logout,
 } = require('../controllers/users');
 const { urlPattern, celebrateErrors } = require('../utils/utils');
 
@@ -32,5 +32,8 @@ router.patch('/me/avatar', celebrate({
     avatar: Joi.string().pattern(urlPattern),
   }).messages(celebrateErrors),
 }), updateAvatar);
+
+// Выход пользователя из системы
+router.get('/logout', logout);
 
 module.exports = router;
