@@ -14,6 +14,8 @@ module.exports = (req, res, next) => {
     // Обработка предварительного запроса
     if (method === 'OPTIONS') {
       res.set({
+        'Access-Control-Allow-Origin': origin,
+        'Access-Control-Allow-Credentials': true,
         'Access-Control-Allow-Methods': DEFAULT_ALLOWED_METHODS,
         'Access-Control-Allow-Headers': req.headers['access-control-request-headers'],
       });
