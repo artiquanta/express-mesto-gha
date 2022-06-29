@@ -55,10 +55,12 @@ module.exports.login = (req, res, next) => {
           maxAge: 604800000,
           httpOnly: true,
           sameSite: 'none',
+          secure: true,
         })
         .cookie('auth', 'active', {
           maxAge: 604800000,
           sameSite: 'none',
+          secure: true,
         })
         .send({ message: 'Вы успешно авторизовались' });
     })
@@ -73,9 +75,11 @@ module.exports.logout = (req, res, next) => {
     .clearCookie('jwt', {
       httpOnly: true,
       sameSite: 'none',
+      secure: true,
     })
     .clearCookie('auth', {
       sameSite: 'none',
+      secure: true,
     })
     .send({ message: 'Вы успешно вышли из системы. До скорой встречи' });
 };
