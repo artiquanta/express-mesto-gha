@@ -18,7 +18,7 @@ const app = express();
 app.use(helmet());
 app.use(rateLimit({
   windowMs: 450000,
-  max: 2,
+  max: 250,
   message: {
     message: 'Слишком много запросов с одного IP. Попробуйте позже, через 7,5 минут',
   },
